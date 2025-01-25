@@ -6,9 +6,9 @@ public class MovingControl : MonoBehaviour
 {
     private Animation anim; // Reference to the Animation component
     public Transform globeCenter; // Reference to the globe's center
+    public Transform mainCamera; // Reference to the main camera
     public float rotationSpeed = 50f; // Speed of movement around the globe
     public float distanceFromGlobe = 5.1f; // Desired distance from the globe's surface
-    private Quaternion defaultRotation; // Default idle rotation
     private bool isMoving = false; // Track if the player is moving
 
     void Start()
@@ -19,9 +19,6 @@ public class MovingControl : MonoBehaviour
         {
             Debug.LogError("No Animation component found on the player!");
         }
-
-        // Save the default rotation as the idle rotation
-        defaultRotation = transform.rotation;
 
         // Set the player to the correct distance from the globe at the start
         AlignWithGlobeSurface();
@@ -42,7 +39,7 @@ public class MovingControl : MonoBehaviour
             isMoving = true;
 
             // Face left
-            SetFixedTilt(-90);
+            FaceDirection(-1);
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
@@ -54,14 +51,14 @@ public class MovingControl : MonoBehaviour
             isMoving = true;
 
             // Face right
-            SetFixedTilt(90);
+            FaceDirection(1);
         }
 
-        // If not moving, reset to the default idle rotation
+        // If not moving, reset to face the main camera
         if (!isMoving)
         {
             anim.Play("idle"); // Play idle animation
-            ResetToDefaultRotation(); // Ensure the rotation stays fixed
+            FaceCamera();
         }
 
         // Align the player to the globe's surface after movement
@@ -80,16 +77,26 @@ public class MovingControl : MonoBehaviour
         transform.up = directionToGlobe;
     }
 
-    void SetFixedTilt(float angle)
+    void FaceDirection(int direction)
     {
-        // Tilt the player to the left or right by a fixed angle
-        Quaternion tiltRotation = Quaternion.Euler(0, angle, 0); // Tilt along Y-axis only
-        transform.rotation = tiltRotation;
+        // Adjust the local rotation to face clockwise (1) or counter-clockwise (-1)
+        if (direction == -1) // Face left
+        {
+            transform.localRotation = Quaternion.Euler(0, 180, 0); // Rotate to face left
+        }
+        else if (direction == 1) // Face right
+        {
+            transform.localRotation = Quaternion.Euler(0, 0, 0); // Rotate to face right
+        }
     }
 
-    void ResetToDefaultRotation()
+    void FaceCamera()
     {
-        // Immediately reset to the default idle rotation
-        transform.rotation = defaultRotation;
+        // Calculate the direction to face the main camera
+        Vector3 directionToCamera = (mainCamera.position - transform.position).normalized;
+
+        // Update rotation to look at the camera
+        Quaternion targetRotation = Quaternion.LookRotation(-directionToCamera, transform.up);
+        transform.rotation = targetRotation;
     }
 }
