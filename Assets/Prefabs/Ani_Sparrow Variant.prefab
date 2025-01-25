@@ -143,34 +143,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6788538757290762323, guid: ad4137f595ec8e2449cacca9df7d3735, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3632808124900941144}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad4137f595ec8e2449cacca9df7d3735, type: 3}
---- !u!1 &3565360911956188183 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6788538757290762323, guid: ad4137f595ec8e2449cacca9df7d3735, type: 3}
-  m_PrefabInstance: {fileID: 8020639166544985156}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3632808124900941144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3565360911956188183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95e6735b6144a44de9aa5f7feff0ceb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globeCenter: {fileID: 0}
-  player: {fileID: 0}
-  animals:
-  - {fileID: 3565360911956188183}
-  - {fileID: 3217417490850978776, guid: e201da8a24e3a42b38f4f7a1838742b9, type: 3}
-  - {fileID: 4111389711542651185, guid: 278593f0ead514571a535e42123d9fb1, type: 3}
-  distanceFromGlobe: 5.1
-  respawnTime: 5
-  spawnDist: 2
