@@ -139,9 +139,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54496da0f8f504655abb853c20a349d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globeCenter: {fileID: 642336133}
+  globeCenter: {fileID: 0}
   rotationSpeed: 50
-  distanceFromGlobe: 8.98
+  distanceFromGlobe: 5.1
 --- !u!1 &554692060
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,11 +576,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 4.0644193
   m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &642336133 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7c416d4d1b860406cb1461dcba94a2ec, type: 3}
-  m_PrefabInstance: {fileID: 1050374061}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1050374061
 PrefabInstance:
   m_ObjectHideFlags: 0
