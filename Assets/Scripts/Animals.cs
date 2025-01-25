@@ -32,7 +32,15 @@ public class AnimalSpawn : MonoBehaviour
     
     void Spawn()
     {
+        // Randomly choose the animal (S, M, L)
+        GameObject ani = animals[Random.Range(0, animals.Length)];
 
+        Vector3 loc;
+        do
+        {
+            loc = Random.onUnitSphere * distanceFromGlobe;
+        }
+        while (Vector3.Distance(loc, player.position) < spawnDist);
     }  
 
     // Update is called once per frame
