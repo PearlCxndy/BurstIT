@@ -194,6 +194,9 @@
         },
         {
             "m_Id": "e8ab4d04ea00408282b4adbfc7749901"
+        },
+        {
+            "m_Id": "2d3d559cf2704996b47a43a7db41eccb"
         }
     ],
     "m_GroupDatas": [],
@@ -1110,6 +1113,9 @@
             },
             {
                 "m_Id": "dc0d76543ea44a78ac368b20a938e94f"
+            },
+            {
+                "m_Id": "2d3d559cf2704996b47a43a7db41eccb"
             }
         ]
     },
@@ -2682,6 +2688,40 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
+    "m_ObjectId": "2d3d559cf2704996b47a43a7db41eccb",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "SurfaceDescription.AlphaClipThreshold",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "e0a85afd10784b95b43252077f6d928f"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedDescriptor": "SurfaceDescription.AlphaClipThreshold"
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "2eb30cc29c904648b36f3a18bc83a879",
     "m_Group": {
         "m_Id": ""
@@ -4084,10 +4124,10 @@
     "m_ActiveSubTarget": {
         "m_Id": "b5411db2fd9547b4b5376007426cdaf9"
     },
-    "m_AllowMaterialOverride": false,
+    "m_AllowMaterialOverride": true,
     "m_SurfaceType": 1,
     "m_ZTestMode": 4,
-    "m_ZWriteControl": 0,
+    "m_ZWriteControl": 1,
     "m_AlphaMode": 0,
     "m_RenderFace": 2,
     "m_AlphaClip": false,
@@ -4428,9 +4468,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1062.4998779296875,
-            "y": 439.0,
-            "width": 207.99993896484376,
+            "x": -1062.5,
+            "y": 434.5,
+            "width": 208.0,
             "height": 104.0
         }
     },
@@ -4452,40 +4492,50 @@
     "m_Value": 0.0,
     "m_SerializableColorKeys": [
         {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 0.0
-        },
-        {
-            "x": 0.0,
-            "y": 0.036446571350097659,
-            "z": 1.0,
-            "w": 0.19699397683143617
-        },
-        {
             "x": 0.0,
             "y": 1.0,
             "z": 0.8462276458740234,
-            "w": 0.5097734332084656
+            "w": 0.0
+        },
+        {
+            "x": 0.012619576416909695,
+            "y": 0.0,
+            "z": 0.9716981053352356,
+            "w": 0.3503776490688324
         },
         {
             "x": 1.0,
             "y": 0.03301888704299927,
             "z": 0.7682548761367798,
-            "w": 0.7503776550292969
+            "w": 0.6345921754837036
+        },
+        {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 0.7759365439414978
         },
         {
             "x": 1.0,
             "y": 0.9132969975471497,
             "z": 0.0,
+            "w": 0.8736858367919922
+        },
+        {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
             "w": 1.0
         }
     ],
     "m_SerializableAlphaKeys": [
         {
-            "x": 0.3607843220233917,
+            "x": 0.0,
             "y": 0.0
+        },
+        {
+            "x": 1.0,
+            "y": 0.3458609879016876
         },
         {
             "x": 1.0,
@@ -6270,6 +6320,21 @@
         "z": 0.0,
         "w": 0.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "e0a85afd10784b95b43252077f6d928f",
+    "m_Id": 0,
+    "m_DisplayName": "Alpha Clip Threshold",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "AlphaClipThreshold",
+    "m_StageCapability": 2,
+    "m_Value": 0.5,
+    "m_DefaultValue": 0.5,
+    "m_Labels": []
 }
 
 {
