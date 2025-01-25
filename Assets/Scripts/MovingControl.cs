@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovingControl : MonoBehaviour
 {
-    private Animation anim; // Reference to the Animation component
+    private Animation playerAnimation; // Reference to the Animation component
     public Transform globeCenter; // Reference to the globe's center
     public float rotationSpeed = 50f; // Speed of movement around the globe
     public float distanceFromGlobe = 5.1f; // Desired distance from the globe's surface
@@ -14,8 +14,8 @@ public class MovingControl : MonoBehaviour
     void Start()
     {
         // Get the Animation component attached to the GameObject
-        anim = GetComponent<Animation>();
-        if (anim == null)
+        playerAnimation = GetComponent<Animation>();
+        if (playerAnimation == null)
         {
             Debug.LogError("No Animation component found on the player!");
         }
@@ -34,25 +34,48 @@ public class MovingControl : MonoBehaviour
     void Update()
     {
         isMoving = false; // Reset movement flag
+        Vector3 movementDirection = Vector3.zero; // Track the movement direction
 
-        // Check for movement input
+        // Check for movement input and set movement direction
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.RotateAround(globeCenter.position, Vector3.forward, rotationSpeed * Time.deltaTime);
-            anim.Play("running");
+            transform.RotateAround(globeCenter.position, Vector3.up, rotationSpeed * Time.deltaTime);
+            playerAnimation.Play("running");
             isMoving = true;
+            movementDirection = Vector3.left; // Moving left
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            transform.RotateAround(globeCenter.position, Vector3.forward, -rotationSpeed * Time.deltaTime);
-            anim.Play("running");
+            transform.RotateAround(globeCenter.position, Vector3.up, -rotationSpeed * Time.deltaTime);
+            playerAnimation.Play("running");
             isMoving = true;
+            movementDirection = Vector3.right; // Moving right
+        }
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.RotateAround(globeCenter.position, Vector3.right, rotationSpeed * Time.deltaTime);
+            playerAnimation.Play("running");
+            isMoving = true;
+            movementDirection = Vector3.forward; // Moving forward
+        }
+        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.RotateAround(globeCenter.position, Vector3.right, -rotationSpeed * Time.deltaTime);
+            playerAnimation.Play("running");
+            isMoving = true;
+            movementDirection = Vector3.back; // Moving backward
         }
 
-        // Reset to default position and rotation if idle
-        if (!isMoving)
+        // If moving, rotate player to face movement direction
+        if (isMoving && movementDirection != Vector3.zero)
         {
-            anim.Play("idle");
+            Quaternion targetRotation = Quaternion.LookRotation(movementDirection, transform.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 500f); // Smooth rotation
+        }
+        else if (!isMoving)
+        {
+            // Reset to default animation and rotation
+            playerAnimation.Play("idle");
             ResetToDefaultRotation();
         }
 
@@ -60,6 +83,11 @@ public class MovingControl : MonoBehaviour
         AlignWithGlobeSurface();
     }
 
+
+    void AlignWithMovementDirection()
+    {
+
+    }
     void AlignWithGlobeSurface()
     {
         Vector3 directionToGlobe = (transform.position - globeCenter.position).normalized;
