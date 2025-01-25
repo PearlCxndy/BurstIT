@@ -5,70 +5,43 @@ using UnityEngine;
 public class MovingControl : MonoBehaviour
 {
     private Animation anim; // Reference to the Animation component
-    public Transform globeCenter; // Reference to the globe's center
-    public float rotationSpeed = 50f; // Speed of movement around the globe
-    public float distanceFromGlobe = 5.1f; // Desired distance from the globe's surface
-    private Quaternion defaultRotation; // Default idle rotation
-    private bool isMoving = false; // Track if the player is moving
+    private Vector3 direction = Vector3.zero; // Movement direction
+    private float fVel = 2.0f; // Movement speed
 
     void Start()
     {
         // Get the Animation component attached to the GameObject
         anim = GetComponent<Animation>();
-        if (anim == null)
-        {
-            Debug.LogError("No Animation component found on the player!");
-        }
-
-        // Set the player's initial position and rotation
-        transform.position = new Vector3(-0.8611059f, 3.92f, 1.940774f);
-        transform.rotation = Quaternion.Euler(15.792f, -178.773f, -0.648f);
-
-        // Save the default rotation as the idle rotation
-        defaultRotation = transform.rotation;
-
-        // Align the player to the globe's surface
-        AlignWithGlobeSurface();
     }
 
     void Update()
     {
-        isMoving = false; // Reset movement flag
+        // Reset direction
+        direction = Vector3.zero;
 
         // Check for movement input
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.RotateAround(globeCenter.position, Vector3.forward, rotationSpeed * Time.deltaTime);
-            anim.Play("running");
-            isMoving = true;
+            direction = -transform.right * (fVel * Time.deltaTime); // Move left
+            anim.Play("running"); // Play running animation
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            transform.RotateAround(globeCenter.position, Vector3.forward, -rotationSpeed * Time.deltaTime);
-            anim.Play("running");
-            isMoving = true;
+            direction = transform.right * (fVel * Time.deltaTime); // Move right
+            anim.Play("running"); // Play running animation
         }
-
-        // Reset to default position and rotation if idle
-        if (!isMoving)
+        else
         {
-            anim.Play("idle");
-            ResetToDefaultRotation();
+            anim.Play("idle"); // Play idle animation when no keys are pressed
         }
 
-        // Align to the globe's surface
-        AlignWithGlobeSurface();
-    }
+        // Check for mouse click (trigger throwing animation)
+        if (Input.GetMouseButtonDown(0)) // Left mouse button
+        {
+            anim.Play("throwing"); // Play throwing animation
+        }
 
-    void AlignWithGlobeSurface()
-    {
-        Vector3 directionToGlobe = (transform.position - globeCenter.position).normalized;
-        transform.position = globeCenter.position + directionToGlobe * distanceFromGlobe;
-        transform.up = directionToGlobe;
-    }
-
-    void ResetToDefaultRotation()
-    {
-        transform.rotation = defaultRotation;
+        // Apply movement to the GameObject
+        transform.position += direction;
     }
 }
