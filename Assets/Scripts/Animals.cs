@@ -17,10 +17,23 @@ public class AnimalSpawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(Setup());
+    }
+
+    IEnumerator Setup()
+    {
+        yield return new WaitForSeconds(2f);
+        while (true)
+        {
+            Spawn();
+            yield return new WaitForSeconds(respawnTime);
+        }
     }
     
-    
+    void Spawn()
+    {
+
+    }  
 
     // Update is called once per frame
     void Update()
