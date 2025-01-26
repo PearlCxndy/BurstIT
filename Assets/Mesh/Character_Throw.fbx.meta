@@ -38,11 +38,11 @@ ModelImporter:
       internalID: -203655887218126122
       firstFrame: 0
       lastFrame: 146
-      wrapMode: 4
+      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
-      loop: 1
+      loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
@@ -84,7 +84,7 @@ ModelImporter:
     bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 1
-    maxBonesPerVertex: 2
+    maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
     meshOptimizationFlags: -1
