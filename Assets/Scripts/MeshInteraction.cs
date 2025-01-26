@@ -6,6 +6,7 @@ public class MeshInteraction : MonoBehaviour
     public Transform player; // Reference to the player
     public Transform globeCenter; // Reference to the globe's center
     public float distanceFromGlobe = 5.1f; // Desired distance from the globe's surface
+    // 1.7f vs 5.1f
 
     [Header("Throwing Settings")]
     public KeyCode throwKey = KeyCode.T; // Key to throw the object
