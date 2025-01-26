@@ -1,86 +1,81 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnArrow : MonoBehaviour
 {
-    private Vector3 initialDirection; // Initial direction to the player
-    private float rotationSpeed = 2.0f; // Speed of oscillation
-    private float arrowDistanceFromGlobe = 4.0f; // How far away from the globe is the arrow
-    public Transform globeCenter; // Reference to the center of the globe
+    [Header("Arrow Settings")]
+    public Transform globeCenter; // Reference to the globe's center
     public Transform playerLocation; // Reference to the player's position
-    private float oscillationAngle = 45f; // Maximum oscillation angle (±45 degrees)
-    private float timeElapsed = 0f; // Tracks time for oscillation
-    private Quaternion targetRotation; // Rotation pointing to the player
-    private enum ArrowState { Hidden, Oscillating, Static }
-    private ArrowState currentState = ArrowState.Hidden;
-    private Renderer arrowRenderer; // To control visibility of the arrow
+    public float arrowDistanceFromGlobe = 4.0f; // How far away from the globe is the arrow
+    public float rotationSpeed = 2.0f; // Speed of oscillation
+    public float oscillationAngle = 45f; // Maximum oscillation angle (±45 degrees)
 
-    void Start()
+    private Renderer arrowRenderer; // To control visibility of the arrow
+    private float timeElapsed = 0f; // Tracks time for oscillation
+    private bool isOscillating = false; // Controls whether the arrow oscillates
+    private Vector3 currentDirection; // Current direction the arrow is pointing
+
+    private void Start()
     {
-        // Get the Renderer component to show/hide the arrow
+        // Cache the Renderer component
         arrowRenderer = GetComponent<Renderer>();
         if (arrowRenderer == null)
         {
             Debug.LogError("Arrow Renderer not found!");
         }
 
-        // Initially hide the arrow
-        arrowRenderer.enabled = false;
+        // Hide the arrow at the start
+        SetArrowState(false);
     }
 
-    void Update()
+    private void Update()
     {
-        // Handle user input
-        HandleInput();
-
-        // Perform actions based on the current state
-        switch (currentState)
+        // Follow the player and optionally oscillate if enabled
+        if (arrowRenderer.enabled)
         {
-            case ArrowState.Hidden:
-                // Arrow is hidden, do nothing
-                break;
+            FollowPlayerAroundGlobe();
 
-            case ArrowState.Oscillating:
-                FollowPlayerAroundGlobe(); // Arrow follows the player’s movement around the globe
-                OscillateArrow(); // Oscillation effect
-                break;
-
-            case ArrowState.Static:
-                // FollowPlayerAroundGlobe(); // Arrow follows the player’s movement but stays static
-                // StopOscillation();
-                break;
-        }
-    }
-
-    void HandleInput()
-    {
-        // Detect when the player clicks (left mouse button or touch)
-        if (Input.GetMouseButtonDown(0)) // Left mouse button or first touch
-        {
-            if (currentState == ArrowState.Hidden)
+            if (isOscillating)
             {
-                // Show the arrow and start oscillating
-                arrowRenderer.enabled = true;
-                currentState = ArrowState.Oscillating;
-                timeElapsed = 0f; // Reset oscillation time
-            }
-            else if (currentState == ArrowState.Oscillating)
-            {
-                // Stop the oscillation and keep the arrow static
-                currentState = ArrowState.Static;
-            }
-            else if (currentState == ArrowState.Static)
-            {
-                // Stop rotations and hide the arrow
-                currentState = ArrowState.Hidden;
-                arrowRenderer.enabled = false;
+                OscillateArrow();
             }
         }
     }
 
+    public void SetArrowState(bool state)
+    {
+        // Show or hide the arrow
+        if (arrowRenderer != null)
+        {
+            arrowRenderer.enabled = state;
+        }
 
-    void OscillateArrow()
+        // Stop oscillation if hiding
+        if (!state)
+        {
+            isOscillating = false;
+            timeElapsed = 0f; // Reset oscillation
+        }
+    }
+
+    public void StartOscillation()
+    {
+        isOscillating = true;
+        timeElapsed = 0f; // Reset oscillation
+    }
+
+    public void StopArrowOscillation()
+    {
+        // Stops the arrow's movement
+        isOscillating = false;
+    }
+
+    public Vector3 GetArrowDirection()
+    {
+        // Return the current direction the arrow is pointing
+        return transform.up.normalized;
+    }
+
+    private void OscillateArrow()
     {
         // Increment time for the sine wave
         timeElapsed += Time.deltaTime * rotationSpeed;
@@ -88,31 +83,33 @@ public class SpawnArrow : MonoBehaviour
         // Calculate the oscillation angle offset
         float offsetAngle = Mathf.Sin(timeElapsed) * oscillationAngle;
 
-        // Add the oscillation offset to the arrow's rotation
+        // Apply the oscillation rotation
         Quaternion oscillationRotation = Quaternion.Euler(0, 0, offsetAngle);
-
         transform.rotation = oscillationRotation * transform.rotation;
+
+        // Update the arrow's current direction
+        currentDirection = transform.up.normalized;
     }
 
-    void StopOscillation()
+    private void FollowPlayerAroundGlobe()
     {
-        // Reset or stop oscillation if necessary
-    }
+        // Align the arrow's position around the globe based on the player
+        if (globeCenter == null || playerLocation == null)
+        {
+            Debug.LogError("GlobeCenter or PlayerLocation is not assigned!");
+            return;
+        }
 
-    void FollowPlayerAroundGlobe()
-    {
-        // Get the direction vector from the globe center to the player
-        Vector3 directionToPlayer = playerLocation.position - globeCenter.position;
+        // Direction from the globe center to the player
+        Vector3 directionToPlayer = (playerLocation.position - globeCenter.position).normalized;
 
-        // Only use the X and Y components of the direction vector, ignore Z
-        Vector3 relativePosition2D = new Vector3(directionToPlayer.x, directionToPlayer.y, 0).normalized;
+        // Position the arrow slightly above the globe surface
+        transform.position = globeCenter.position + directionToPlayer * arrowDistanceFromGlobe;
 
-        // Keep the arrow's Z position constant
-        Vector3 newArrowPosition = globeCenter.position + relativePosition2D * arrowDistanceFromGlobe;
-        newArrowPosition.z = transform.position.z;
+        // Align the arrow's up direction with the player
+        transform.up = directionToPlayer;
 
-        // Update the arrow's position
-        transform.position = newArrowPosition;
-        transform.up = relativePosition2D;
+        // Update the arrow's current direction
+        currentDirection = transform.up.normalized;
     }
 }

@@ -6,6 +6,7 @@ public class AttachToHead : MonoBehaviour
     public Transform playerHead; // The player's head where the object will attach
     public float heightOffset = 1.5f; // Height offset for the attachment
     public MeshInteraction meshInteraction; // Reference to the MeshInteraction script on the same object
+    public SpawnArrow spawnArrow; // Reference to the SpawnArrow script
 
     private void Start()
     {
@@ -13,6 +14,12 @@ public class AttachToHead : MonoBehaviour
         if (meshInteraction != null)
         {
             meshInteraction.enabled = false;
+        }
+
+        // Ensure the arrow is initially hidden
+        if (spawnArrow != null)
+        {
+            spawnArrow.SetArrowState(false);
         }
     }
 
@@ -30,6 +37,13 @@ public class AttachToHead : MonoBehaviour
             if (meshInteraction != null)
             {
                 meshInteraction.enabled = true;
+            }
+
+            // Show and oscillate the arrow
+            if (spawnArrow != null)
+            {
+                spawnArrow.SetArrowState(true);
+                spawnArrow.StartOscillation();
             }
 
             // Disable this script to prevent reattachment

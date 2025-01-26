@@ -197,6 +197,11 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000058357795, y: 1, z: -0.012615947}
+--- !u!111 &142084292 stripped
+Animation:
+  m_CorrespondingSourceObject: {fileID: 2223639932434330405, guid: e17edaa4366d844b9b18a839af5ba841, type: 3}
+  m_PrefabInstance: {fileID: 1723872996}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &554692060
 GameObject:
   m_ObjectHideFlags: 0
@@ -5832,6 +5837,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6788538757290762323, guid: ad4137f595ec8e2449cacca9df7d3735, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1719405026}
+    - targetCorrespondingSourceObject: {fileID: 6788538757290762323, guid: ad4137f595ec8e2449cacca9df7d3735, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1719405031}
   m_SourcePrefab: {fileID: 100100000, guid: ad4137f595ec8e2449cacca9df7d3735, type: 3}
 --- !u!1001 &1404725528
 PrefabInstance:
@@ -6128,8 +6136,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  spawnArrow: {fileID: 0}
   globeCenter: {fileID: 0}
   distanceFromGlobe: 5.1
+  playerAnimation: {fileID: 0}
   throwKey: 323
   throwForce: 10
   throwUpwardForce: 2
@@ -6436,8 +6446,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 142084288}
+  spawnArrow: {fileID: 0}
   globeCenter: {fileID: 1620912810}
   distanceFromGlobe: 8.9
+  playerAnimation: {fileID: 142084292}
   throwKey: 116
   throwForce: 10
   throwUpwardForce: 7
@@ -6525,6 +6537,24 @@ MonoBehaviour:
   playerHead: {fileID: 142084288}
   heightOffset: 1.5
   meshInteraction: {fileID: 1719405019}
+  spawnArrow: {fileID: 1796801509}
+--- !u!114 &1719405031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719405014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54b68811f1957025c923df12ad6d83bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globeCenter: {fileID: 1620912810}
+  playerLocation: {fileID: 142084288}
+  arrowDistanceFromGlobe: 4
+  rotationSpeed: 2
+  oscillationAngle: 45
 --- !u!1001 &1723872996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7004,6 +7034,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globeCenter: {fileID: 1620912810}
   playerLocation: {fileID: 142084288}
+  arrowDistanceFromGlobe: 4
+  rotationSpeed: 2
+  oscillationAngle: 45
 --- !u!212 &1796801510
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7089,8 +7122,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  spawnArrow: {fileID: 0}
   globeCenter: {fileID: 0}
   distanceFromGlobe: 5.1
+  playerAnimation: {fileID: 0}
   throwKey: 323
   throwForce: 10
   throwUpwardForce: 2
