@@ -40,71 +40,72 @@ public class MeshInteraction : MonoBehaviour
     }
 
     private void Update()
+{
+    // Allow throwing if the object is attached and the player presses the throw key
+    if (Input.GetKeyDown(throwKey) && isAttached && !isThrowing)
     {
-        // Allow throwing if the object is attached and the player presses the throw key
-        if (Input.GetKeyDown(throwKey) && isAttached && !isThrowing)
-        {
-            PrepareToThrow();
-        }
+        PrepareToThrow();
+    }
+}
+
+private void PrepareToThrow()
+{
+    isThrowing = true; // Prevent further inputs during the throw sequence
+
+    // Stop the arrow's movement and freeze it in its current direction
+    if (spawnArrow != null)
+    {
+        spawnArrow.StopArrowOscillation(); // Stop oscillating the arrow
+        stopArrowDirection = spawnArrow.GetArrowDirection(); // Get the arrow's final direction
     }
 
-    private void PrepareToThrow()
+    // Play the player's throwing animation
+    if (playerAnimation != null)
     {
-        isThrowing = true; // Prevent further inputs during the throw sequence
-
-        // Stop the arrow's movement and freeze it in its current direction
-        if (spawnArrow != null)
-        {
-            spawnArrow.StopArrowOscillation(); // Stop oscillating the arrow
-            stopArrowDirection = spawnArrow.GetArrowDirection(); // Get the arrow's final direction
-        }
-
-        // Play the player's throwing animation
-        if (playerAnimation != null)
-        {
-            Debug.Log("Playing throwing animation...");
-            playerAnimation.Play("throwing"); // Assumes "throwing" is an animation clip
-        }
-
-        // Call the ThrowObject method after the animation delay
-        float throwingAnimationDuration = 1.0f; // Adjust based on your animation length
-        Invoke(nameof(ThrowObject), throwingAnimationDuration);
+        Debug.Log("Playing throwing animation...");
+        playerAnimation.Play("throwing"); // Assumes "throwing" is an animation clip
     }
 
-    private void ThrowObject()
+    // Call the ThrowObject method after the animation delay
+    float throwingAnimationDuration = 1.0f; // Adjust based on your animation length
+    Invoke(nameof(ThrowObject), throwingAnimationDuration);
+}
+
+private void ThrowObject()
+{
+    Debug.Log("Throwing the object...");
+
+    // Detach from the player
+    isAttached = false;
+    transform.SetParent(null);
+
+    // Enable physics and gravity
+    if (rb != null)
     {
-        Debug.Log("Throwing the object...");
+        rb.isKinematic = false;
+        rb.useGravity = true;
 
-        // Detach from the player
-        isAttached = false;
-        transform.SetParent(null);
+        // Apply the throwing force in the direction the arrow was pointing
+        Vector3 forceToAdd = stopArrowDirection * throwForce + player.up * throwUpwardForce;
+        rb.AddForce(forceToAdd, ForceMode.Impulse);
 
-        // Enable physics and gravity
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-
-            // Apply the throwing force in the direction the arrow was pointing
-            Vector3 forceToAdd = stopArrowDirection * throwForce + player.up * throwUpwardForce;
-            rb.AddForce(forceToAdd, ForceMode.Impulse);
-
-            Debug.Log($"Object thrown with force: {forceToAdd}");
-        }
-
-        // Hide the arrow after throwing
-        if (spawnArrow != null)
-        {
-            Debug.Log("Hiding the arrow...");
-            spawnArrow.SetArrowState(false); // Disable the arrow
-        }
-
-        // Reset the throwing state after the throw is completed
-        Invoke(nameof(ResetThrowState), 0.5f);
+        Debug.Log($"Object thrown with force: {forceToAdd}");
     }
 
-    private void ResetThrowState()
+    // Hide the arrow after throwing
+    if (spawnArrow != null)
     {
-        isThrowing = false; // Allow new interactions
+        Debug.Log("Hiding the arrow...");
+        spawnArrow.SetArrowState(false); // Disable the arrow
     }
+
+    // Reset the throwing state after the throw is completed
+    Invoke(nameof(ResetThrowState), 0.5f);
+}
+
+private void ResetThrowState()
+{
+    isThrowing = false; // Allow new interactions
+}
+
 }
