@@ -24,7 +24,7 @@ public class SpawnArrow : MonoBehaviour
         }
 
         // Hide the arrow at the start
-        SetArrowState(false);
+        SetArrowState(true); // false
     }
 
     private void Update()
