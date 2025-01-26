@@ -6,7 +6,7 @@ public class SpawnArrow : MonoBehaviour
 {
     private Vector3 initialDirection; // Initial direction to the player
     private float rotationSpeed = 2.0f; // Speed of oscillation
-    private float arrowDistanceFromGlobe = 2.0f; // How far away from the globe is the arrow
+    private float arrowDistanceFromGlobe = 4.0f; // How far away from the globe is the arrow
     public Transform globeCenter; // Reference to the center of the globe
     public Transform playerLocation; // Reference to the player's position
     private float oscillationAngle = 45f; // Maximum oscillation angle (±45 degrees)
