@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: bubbleMaterial
+  m_Name: bubbleMedium
   m_Shader: {fileID: -6465566751694194690, guid: 1accfd00686bd43848c2a0ec6bf1726d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -30,7 +30,7 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses: []
@@ -108,13 +108,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AddAlpha: -0.02
+    - _AddAlpha: -0.01
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BlendOpacity: 1.89
-    - _BlendSharpness: 0
+    - _BlendSharpness: 12.1
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
@@ -130,10 +130,11 @@ Material:
     - _DstBlendAlpha: 10
     - _EnableExternalAlpha: 0
     - _EnvironmentReflections: 1
-    - _FresnelPower: 2.82
+    - _FresnelPower: 1.59
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _Hue: 0
     - _InnerAlpha: 0.05
     - _Metallic: 0
     - _NoiseSubtraction: 0.46
@@ -152,10 +153,12 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 1
-    - _noiseSize: 1.42
+    - _noiseSize: 6.5
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0.34117648}
-    - _Color: {r: 0.6839622, g: 1, b: 0.99347514, a: 0}
+    - _Color: {r: 1, g: 0, b: 0, a: 0}
+    - _Color1: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 1}
+    - _Color2: {r: 0.28109956, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
