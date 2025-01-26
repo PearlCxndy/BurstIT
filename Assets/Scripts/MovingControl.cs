@@ -11,6 +11,10 @@ public class MovingControl : MonoBehaviour
     private Quaternion defaultRotation; // Default idle rotation
     private bool isMoving = false; // Track if the player is moving
 
+    // New variable to control throwing animation cycle
+    private int clickCount = 0; // Counter to track click states
+    private bool isThrowing = false; // Whether the player is in the throwing state
+
     void Start()
     {
         // Get the Animation component attached to the GameObject
@@ -33,37 +37,66 @@ public class MovingControl : MonoBehaviour
 
     void Update()
     {
+        // Check for click input to cycle states
+        if (Input.GetMouseButtonDown(0)) // Left click
+        {
+            clickCount++;
+            if (clickCount > 2) clickCount = 0; // Reset after third click
+
+            // Handle animation state based on click count
+            switch (clickCount)
+            {
+                case 0:
+                    playerAnimation.Play("idle"); // Reset to idle
+                    isThrowing = false;
+                    break;
+
+                case 1:
+                    playerAnimation.Play("idle"); // Enter throwing animation
+                    isThrowing = true;
+                    break;
+
+                case 2:
+                    playerAnimation.Play("throwing"); // Stay in throwing animation
+                    isThrowing = true;
+                    break;
+            }
+        }
+
+        // Normal movement logic
         isMoving = false; // Reset movement flag
         Vector3 movementDirection = Vector3.zero; // Track the movement direction
 
-        // Check for movement input and set movement direction
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.RotateAround(globeCenter.position, Vector3.up, rotationSpeed * Time.deltaTime);
-            playerAnimation.Play("running");
-            isMoving = true;
-            movementDirection = Vector3.left; // Moving left
-        }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.RotateAround(globeCenter.position, Vector3.up, -rotationSpeed * Time.deltaTime);
-            playerAnimation.Play("running");
-            isMoving = true;
-            movementDirection = Vector3.right; // Moving right
-        }
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.RotateAround(globeCenter.position, Vector3.right, rotationSpeed * Time.deltaTime);
-            playerAnimation.Play("running");
-            isMoving = true;
-            movementDirection = Vector3.forward; // Moving forward
-        }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.RotateAround(globeCenter.position, Vector3.right, -rotationSpeed * Time.deltaTime);
-            playerAnimation.Play("running");
-            isMoving = true;
-            movementDirection = Vector3.back; // Moving backward
+        if (!isThrowing) {
+            // Check for movement input and set movement direction
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.RotateAround(globeCenter.position, Vector3.up, rotationSpeed * Time.deltaTime);
+                playerAnimation.Play("running");
+                isMoving = true;
+                movementDirection = Vector3.left; // Moving left
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.RotateAround(globeCenter.position, Vector3.up, -rotationSpeed * Time.deltaTime);
+                playerAnimation.Play("running");
+                isMoving = true;
+                movementDirection = Vector3.right; // Moving right
+            }
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                transform.RotateAround(globeCenter.position, Vector3.right, rotationSpeed * Time.deltaTime);
+                playerAnimation.Play("running");
+                isMoving = true;
+                movementDirection = Vector3.forward; // Moving forward
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                transform.RotateAround(globeCenter.position, Vector3.right, -rotationSpeed * Time.deltaTime);
+                playerAnimation.Play("running");
+                isMoving = true;
+                movementDirection = Vector3.back; // Moving backward
+            }
         }
 
         // If moving, rotate player to face movement direction
@@ -72,10 +105,8 @@ public class MovingControl : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(movementDirection, transform.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 500f); // Smooth rotation
         }
-        else if (!isMoving)
+        else if (!isMoving && !isThrowing) // Only reset rotation if not throwing
         {
-            // Reset to default animation and rotation
-            playerAnimation.Play("idle");
             ResetToDefaultRotation();
         }
 
@@ -83,11 +114,6 @@ public class MovingControl : MonoBehaviour
         AlignWithGlobeSurface();
     }
 
-
-    void AlignWithMovementDirection()
-    {
-
-    }
     void AlignWithGlobeSurface()
     {
         Vector3 directionToGlobe = (transform.position - globeCenter.position).normalized;
