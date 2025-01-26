@@ -1,60 +1,59 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimalSpawner : MonoBehaviour
 {
-    // 1.71, 1.71 (positivePosition)
-    // -1.71, -1.71 (negativePosition)
+    public GameObject[] objectsToSpawn;
+    public float spawnRadius = 10.0f; // Default value
+    public int numberOfObjects = 10; // Default value
 
-    [Header("Spawn Settings")]
-    public GameObject animalPrefab;
-    public float spawnChance;
+    public bool randomOrientation = false;
+    public bool orientToSurface = false;
 
-    [Header("Raycast Settings")]
-    public float distanceBetweenChecks;
-    public float heightOfCheck = 10f, rangeOfCheck = 30f;
-    public LayerMask layerMask;
-
-    public Vector2 positivePosition, negativePosition;
-
-    private void Start()
+    void Start()
     {
-        SpawnAnimals();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
+        for (int i = 0; i < numberOfObjects; i++)
         {
-            DeleteAnimals();
-            SpawnAnimals();
-        }
-    }
+            // What we will spawn
+            GameObject objectToSpawn = objectsToSpawn[UnityEngine.Random.Range(0, objectsToSpawn.Length)];
 
-    void SpawnAnimals()
-    {
-        for (float x = negativePosition.x; x < positivePosition.x; x += distanceBetweenChecks)
-        {
-            for (float z = negativePosition.y; z < positivePosition.y; z += distanceBetweenChecks)
+            // Vector2 spawnPositionV2 = UnityEngine.Random.insideUnitCircle * spawnRadius;
+            Vector3 spawnPositionV2 = UnityEngine.Random.onUnitSphere * spawnRadius;
+
+            // Vector3 spawnPosition = new Vector3(spawnPositionV2.x, 0.0f, spawnPositionV2.y);
+            Vector3 spawnPosition = new Vector3(spawnPositionV2.x, spawnPositionV2.y, spawnPositionV2.z);
+
+            Vector3 transformOffsetSpawnPosition = transform.position + spawnPosition;
+
+            // Quaternion.identity
+
+            RaycastHit hit;
+            if (Physics.Raycast(transformOffsetSpawnPosition, Vector3.down, out hit))
             {
-                RaycastHit hit;
-                if (Physics.Raycast(new Vector3(x, heightOfCheck, z), Vector3.down, out hit, rangeOfCheck, layerMask))
-                {
-                    if (spawnChance > Random.Range(0, 3))
-                    {
-                        Instantiate(animalPrefab, hit.point, Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0)), transform);
-                    }
-                }
-            }
-        }
-    }
+                Vector3 finalSpawnPosition = hit.point;
 
-    void DeleteAnimals()
-    {
-        foreach (Transform child in transform)
-        {
-            Destroy(child.gameObject);
+                Quaternion orientation;
+
+                if (randomOrientation)
+                {
+                    orientation = UnityEngine.Random.rotation;
+                }
+                else if (orientToSurface)
+                {
+                    orientation = Quaternion.LookRotation(hit.normal);
+                }
+                else
+                {
+                    orientation = objectToSpawn.transform.rotation;
+                }
+
+
+                Instantiate(objectToSpawn, finalSpawnPosition, orientation);
+                Debug.Log("Spawned " + objectToSpawn.name + " at " + finalSpawnPosition);
+            }
+
         }
     }
 }
